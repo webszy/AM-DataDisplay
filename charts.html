@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>留言管理</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/calendar.css">
+    <link rel="stylesheet" type="text/css" href="css/charts.css">
+
+</head>
+<body>
+    <div class="head">
+        <div class="head_left">
+            <p class="menu_toggle"></p>
+            <a href="index.html" class="GoIndex">微信公众号管理平台V1.0</a>
+        </div>
+        <div class="head_right">
+            <div id="message" class="msg_btn ">
+                <a href="javascript:void(0)"></a>
+                <p id="msg_num">3</p>
+                <span class="animated">查看消息</span>
+            </div>
+            <div class="searchBar">
+               <input type="text"  id="search"> 
+            </div>
+            <div class="timeBox">
+                <i id="hour">12</i>
+                :
+                <i id="minute" >12</i>
+                :
+                <i id="second">50</i>
+            </div>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="menu">
+            <a href="index.html" class="menu_clicked">
+                <p class="animated">首页</p>
+            </a>
+            <a href="visitor.html">
+                    <p class="animated">访问统计</p>
+            </a>
+            <a href="Msg.html" >
+                    <p class="animated">留言管理</p>
+            </a>
+            <a href="charts.html" >
+                    <p class="animated">报表分析</p>
+            </a>
+        </div>
+        <div class="board">
+            <div class="userInfo">
+                <img class="animated" src="images/userimg.jpg">
+                <h3>西楼昨夜听春雨</h3>
+                <p>一人一马入江湖，一杯浊酒饮一秋</p>
+                <span>未设置微信号</span>
+            </div>
+            <div class="calendar" id="calendar"></div>
+            <div class="ToDo">
+                <p class="ToDo_tit">待处理消息</p>
+                <ul class="ToDoList">
+                    <li><a href="javascript:void(0)" >新增关注：22个</a></li>
+                    <li><a href="javascript:void(0)" >未读留言：18条</a></li>
+                    <li><a href="javascript:void(0)" >投票结果：22条</a></li>
+                    <li><a href="javascript:void(0)" >收到赞赏：2条</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+        <h1 class="pageTitle">报表分析汇总</h1>
+         <div id="chart"></div>
+            <div>
+
+                    </div>
+                </div>
+            </div>  
+
+    <div class="sliderBtn animated" id="sliderBtn">更换背景</div>
+    <div class="bgBox">
+            <div class="chartTop">
+                <h3 class="title">选择背景</h3>
+                <div class="add"><i></i><i></i></div>
+            </div>
+            <div class="bgimgs">
+                <img src="images/skins/blue.jpg">
+                <img src="images/skins/chrome.jpg">
+                <img src="images/skins/greenish.jpg">
+                <img src="images/skins/night.jpg">
+                <img src="images/skins/sunny.jpg">
+                <img src="images/skins/sunset.jpg">
+                <img src="images/skins/city.jpg">
+                <img src="images/skins/cloth.png">
+                <img src="images/skins/kiwi.jpg">
+                <img src="images/skins/lights.jpg">
+                <img src="images/skins/violate.jpg">
+                <img src="images/skins/yellow.jpg">
+                <img src="images/skins/ocean.jpg">
+                <img src="images/skins/tectile.png">
+            </div>
+    </div>
+    <div class="layer"></div>
+</body>
+</html>
+<script src="js/jquery.min.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery.event.ue.js"></script>
+<script src="js/jquery.udraggable.js"></script>
+<script>
+window.onload=function(){
+    clock();
+    // visitedTable();
+    makechart(document.getElementById("chart"))
+   
+    window.addEventListener("resize",function(){
+        let cilentWidth=document.documentElement.cilentWidth||document.body.cilentWidth;
+        // $(".userInfo span").html($(window).width());
+        // let height=$(".prTwo").offset();
+        // console.log(height)
+        // +$(".prTwo").height()
+        // $(".wrap").css("height",height);
+        $(".menu").prop("style","");
+    })
+    // $(".wrap").css("height",$(".prTwo").offset().top+$(".prTwo").height());
+    $(".head_left").on("click",".menu_toggle", function () {
+        if( $(".menu").css("display")=="block"){
+            $(".menu").css("display","none");
+            $(".board").css("width",233);
+        }else{
+            $(".menu").css("display","block");
+            $(".board").css("width",188);
+        }
+        
+    });
+    $(".bgBox").on("click", "img",function () {
+        let src="url("+$(this).attr("src")+")";
+        $("body").css("background-image",src);
+    });
+
+    $(".bgBox").on("click", ".add",function () {
+        $(".layer").animate({"opacity":0},600,function(){
+            $(".layer").css("display","none");
+        })
+        $(".bgBox").animate({
+            top:"-190px",
+            opacity:0
+        },600,function(){
+            $(".bgBox").css({"display":"none"});
+        });
+    });
+
+    $("#sliderBtn").click(function (e) { 
+        e.preventDefault();
+        $(".layer").css("display","block");
+        $(".bgBox").css("display","block").animate({
+            "top":"50%",
+            "opacity":1
+        },600);
+    });
+}
+function clock(){
+    let hour=document.getElementById("hour");
+    let minute=document.getElementById("minute");
+    let second=document.getElementById("second");
+    let now=new Date();
+    hour.innerHTML=now.getHours()>9?now.getHours():"0"+now.getHours();
+    minute.innerHTML=now.getMinutes()>9?now.getMinutes():"0"+now.getMinutes();;
+    second.innerHTML=now.getSeconds()>9?now.getSeconds():"0"+now.getSeconds();;
+
+    setInterval(function(){
+        let secondNum=parseInt(second.innerHTML);
+        secondNum++;
+        second.innerHTML=secondNum>9?secondNum:"0"+secondNum;
+        if(secondNum>=60){
+            second.innerHTML=0;
+            let minuteNum=parseInt(minute.innerHTML);
+            minuteNum++;
+            minute.innerHTML=minuteNum>9?minuteNum:"0"+minuteNum;
+            if(minuteNum>=60){
+                minute.innerHTML=0;
+                let hourNum=parseInt(hour.innerHTML);
+                hourNum++;
+                hour.innerHTML=hourNum>9?hourNum:"0"+hourNum;
+                if(hourNum>=24){
+                    second.innerHTML=0; 
+                    minute.innerHTML=0;
+                    hour.innerHTML=0;
+                }
+            }
+        }
+    },1000)
+}
+function makechart(dom){
+    var myChart = echarts.init(dom);
+
+   let option = {
+    title: {
+        text: '汇总报表1',
+        textStyle: {
+            fontWeight: 'normal',
+            fontSize: 16,
+            color: '#F1F1F3'
+        },
+        left: '6%'
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            lineStyle: {
+                color: '#57617B'
+            }
+        }
+    },
+    legend: {
+        icon: 'rect',
+        itemWidth: 14,
+        itemHeight: 5,
+        itemGap: 13,
+        data: ['用户关注', '用户留言', '用户访问'],
+        right: '4%',
+        textStyle: {
+            fontSize: 12,
+            color: '#F1F1F3'
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+            lineStyle: {
+                color: 'white'
+            }
+        },
+        data: ['13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55']
+    }, {
+        axisPointer: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#57617B'
+            }
+        },
+        axisTick: {
+            show: false
+        },
+
+        position: 'bottom',
+        offset: 20,
+        data: ['', '', '', '', '', '', '', '', '', '', {
+            value: '周六',
+            textStyle: {
+                align: 'left'
+            }
+        }, '周日']
+    }],
+    yAxis: [{
+        type: 'value',
+        name: '单位（%）',
+        axisTick: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: 'white'
+            }
+        },
+        axisLabel: {
+            margin: 10,
+            textStyle: {
+                fontSize: 14
+            }
+        },
+        splitLine: {
+            lineStyle: {
+                color: '#57617B'
+            }
+        }
+    }],
+    series: [{
+        name: '用户关注',
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 5,
+        showSymbol: false,
+        lineStyle: {
+            normal: {
+                width: 1
+            }
+        },
+        areaStyle: {
+            normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgba(137, 189, 27, 0.3)'
+                }, {
+                    offset: 0.8,
+                    color: 'rgba(137, 189, 27, 0)'
+                }], false),
+                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                shadowBlur: 10
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: 'rgb(137,189,27)',
+                borderColor: 'white',
+                borderWidth: 12
+
+            }
+        },
+        data: [220, 182, 191, 134, 150, 120, 110, 125, 145, 122, 165, 122]
+    }, {
+        name: '用户留言',
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 5,
+        showSymbol: false,
+        lineStyle: {
+            normal: {
+                width: 1
+            }
+        },
+        areaStyle: {
+            normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgba(0, 136, 212, 0.3)'
+                }, {
+                    offset: 0.8,
+                    color: 'rgba(0, 136, 212, 0)'
+                }], false),
+                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                shadowBlur: 10
+            }
+        },
+        itemStyle: {
+            normal: {
+                color: 'rgb(0,136,212)',
+                borderColor: 'rgba(0,136,212,0.2)',
+                borderWidth: 12
+
+            }
+        },
+        data: [120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150]
+    }, {
+        name: '用户访问',
+        type: 'line',
+        smooth: true,
+        symbol: 'circle',
+        symbolSize: 5,
+        showSymbol: false,
+        lineStyle: {
+            normal: {
+                width: 1
+            }
+        },
+        areaStyle: {
+            normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: 'rgba(219, 50, 51, 0.3)'
+                }, {
+                    offset: 0.8,
+                    color: 'rgba(219, 50, 51, 0)'
+                }], false),
+                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                shadowBlur: 10
+            }
+        },
+        itemStyle: {
+            normal: {
+
+                color: 'rgb(219,50,51)',
+                borderColor: 'rgba(219,50,51,0.2)',
+                borderWidth: 12
+            }
+        },
+        data: [220, 182, 125, 145, 122, 191, 134, 150, 120, 110, 165, 122]
+    }, ]
+};
+
+
+    myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+}
+</script>

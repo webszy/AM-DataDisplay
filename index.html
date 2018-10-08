@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>微信公众号后台管理系统---By SAdmin</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/calendar.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+<body>
+    <div class="head">
+        <div class="head_left">
+            <p class="menu_toggle"></p>
+            <a href="index.html" class="GoIndex">微信公众号管理平台V1.0</a>
+        </div>
+        <div class="head_right">
+            <div id="message" class="msg_btn ">
+                <a href="javascript:void(0)"></a>
+                <p id="msg_num">3</p>
+                <span class="animated">查看消息</span>
+            </div>
+            <div class="searchBar">
+               <input type="text"  id="search"> 
+            </div>
+            <div class="timeBox">
+                <i id="hour">12</i>
+                :
+                <i id="minute" >12</i>
+                :
+                <i id="second">50</i>
+            </div>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="menu">
+            <a href="javascript:void(0)" class="menu_clicked">
+                <p class="animated">首页</p>
+            </a>
+            <a href="visitor.html">
+                    <p class="animated">访问统计</p>
+            </a>
+            <a href="Msg.html" >
+                    <p class="animated">留言管理</p>
+            </a>
+            <a href="charts.html" >
+                    <p class="animated">报表分析</p>
+            </a>
+        </div>
+        <div class="board">
+            <div class="userInfo">
+                <img class="animated" src="images/userimg.jpg">
+                <h3>西楼昨夜听春雨</h3>
+                <p>一人一马入江湖，一杯浊酒饮一秋</p>
+                <span>未设置微信号</span>
+            </div>
+            <div class="calendar" id="calendar"></div>
+            <div class="ToDo">
+                <p class="ToDo_tit">待处理消息</p>
+                <ul class="ToDoList">
+                    <li><a href="javascript:void(0)" >新增关注：22个</a></li>
+                    <li><a href="javascript:void(0)" >未读留言：18条</a></li>
+                    <li><a href="javascript:void(0)" >投票结果：22条</a></li>
+                    <li><a href="javascript:void(0)" >收到赞赏：2条</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+            <p class="main_tit">控制台(DashBoard)</p>
+            <div class="quickStart">
+                <a href="javascript:void(0)" class="quickStart_click">首页</a>
+                <a href="visitor.html" >访问统计</a>
+                <a href="Msg.html" >留言管理</a>
+                <a href="charts.html" >报表分析</a>
+            </div>
+            <div class="statsNum">
+                <h3>账号整体情况</h3>
+                <a href="javascript:void(0)" >
+                    <svg width="20" height="20" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.882 15.931A8.366 8.366 0 0 0 10 17c4.418 0 8-3.358 8-7.5C18 5.358 14.418 2 10 2S2 5.358 2 9.5c0 2.028.859 3.869 2.254 5.219l-.274 1.35a.5.5 0 0 0 .74.533l1.162-.67zm.074 2.26L2.664 19.48a.8.8 0 0 1-1.077-.896l.603-3.15C.82 13.807 0 11.743 0 9.5 0 4.253 4.477 0 10 0s10 4.253 10 9.5S15.523 19 10 19c-1.44 0-2.807-.289-4.044-.809z"></path>
+                    </svg>
+                    <span>新消息</span>
+                    <p>18</p>
+                </a>
+                <a href="javascript:void(0)" >
+                        <svg width="23" height="15" viewbox="0 0 23 15" xmlns="http://www.w3.org/2000/svg"><path d="M19.405 2.667L14 8.845l-5-3-9 8 1 1 8-7 5 3 6.505-7.318 2.279 1.78L22.488 0l-5.22.997 2.137 1.67z"></path></svg>                            <path d="M5.882 15.931A8.366 8.366 0 0 0 10 17c4.418 0 8-3.358 8-7.5C18 5.358 14.418 2 10 2S2 5.358 2 9.5c0 2.028.859 3.869 2.254 5.219l-.274 1.35a.5.5 0 0 0 .74.533l1.162-.67zm.074 2.26L2.664 19.48a.8.8 0 0 1-1.077-.896l.603-3.15C.82 13.807 0 11.743 0 9.5 0 4.253 4.477 0 10 0s10 4.253 10 9.5S15.523 19 10 19c-1.44 0-2.807-.289-4.044-.809z"></path>
+                        <span>新增关注</span>
+                        <p>22</p>
+                </a>
+                <a href="javascript:void(0)" >
+                        <svg width="21" height="20" viewbox="0 0 21 20" xmlns="http://www.w3.org/2000/svg"><path d="M6.221 10.526c-.81-.905-1.08-2.952-1.08-3.526V4.21C5.14 1.915 7.82 0 10.445 0s5.304 2.105 5.304 4.21V7c0 2.297-.749 3-1.08 3.526L13.393 12c-.174.352.23.915 1.276 1.684 1.22.562 2.105 1 2.655 1.316 1.008.579 1.959.947 2.949 2 .99 1.053.982 3-.105 3H.722c-.779 0-1.088-2-.105-3 .983-1 1.586-1.183 2.948-2 .448-.268 1.334-.707 2.656-1.316 1.046-.77 1.45-1.333 1.276-1.684L6.22 10.526zM8 10c.63.632.963.912 1 .842.092.199.092 1.251 0 3.158-5.176 2.667-7.56 4-7.151 4H18l-6-4c-.091-1.906-.091-2.959 0-3.158.128.035.475-.263 1.041-.895.36-.402.73-1.105.85-1.947.162-1.142 0-2.505 0-3.421C13.89 2.989 12 2 10 2S7 4 7 5c0 .845-.156 1.91 0 3a3.362 3.362 0 0 0 1 2z"></path></svg>                        <span>总用户</span>
+                        <p>188</p>
+                </a>
+            </div>
+            <div class="statsTable">
+                <div class="Tables" id="visited">
+
+                </div>
+                <div class="Tables" id="msgs">
+
+                </div>
+                <div class="Tables" id="follows">
+
+                </div>
+                <div class="Tables" id="TotalUser">
+
+                </div>
+            </div>
+            <div class="plane">
+                <div class="planeLeft">
+                    <div class="allUser">
+                        <div class="allUserDetail">
+                            <div class="chartTop">
+                                 <h3 class="title">近期用户访问量</h3>
+                                 <div class="tile-actions">
+                                     <ul class="chartMenu animated">
+                                         <li>刷新 </li>
+                                         <li>显示副表</li>
+                                     </ul>
+                                 </div>
+                             </div>
+                            <div class="charts" id="totalUser"></div>
+                        </div> 
+                     </div>
+                     <div class="chartTwo">
+                       <div class="chartTwo1" id="chartTwo1"></div> 
+                       <div class="chartTwo1" id="chartTwo2"></div> 
+                       <div class="chartTwo1" id="chartTwo3"></div>
+                       <div class="chartTwo1" id="chartTwo4"></div>
+                       <div class="chartTwo1" id="chartTwo5"></div>
+                     </div>
+                </div>
+                <div class="planeRight">
+                    <div class="prOne">
+                        <div class="chartTop">
+                                    <h3 class="title">实时监控数据</h3>
+                                    <div class="tile-actions">
+                                        <ul class="chartMenu animated">
+                                            <li>刷新 </li>
+                                            <li>显示副表</li>
+                                        </ul>
+                                    </div>
+                            </div>
+                        <div class="charts" id="chartOne"></div>
+                    </div>
+                    <div class="prTwo">
+                        <div class="chartTop">
+                                <h3 class="title">待办清单</h3>
+                                <div class="tile-actions">
+                                    <ul class="chartMenu animated">
+                                        <li>刷新 </li>
+                                        <li>显示副表</li>
+                                    </ul>
+                                </div>
+                        </div>
+                        <ul class="UserToDo">
+                            <li><p class="checked"></p><a href="javascript:void(0)">敲代码，敲代码，敲代码1</a></li>
+                            <li><p class="checked"></p><a href="javascript:void(0)">敲代码，敲代码，敲代码2</a></li>
+                        </ul>
+                    </div>
+                <div>
+
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+    <div class="sliderBtn animated" id="sliderBtn">更换背景</div>
+    <div class="bgBox">
+            <div class="chartTop">
+                <h3 class="title">选择背景</h3>
+                <div class="add"><i></i><i></i></div>
+            </div>
+            <div class="bgimgs">
+                <img src="images/skins/blue.jpg">
+                <img src="images/skins/chrome.jpg">
+                <img src="images/skins/greenish.jpg">
+                <img src="images/skins/night.jpg">
+                <img src="images/skins/sunny.jpg">
+                <img src="images/skins/sunset.jpg">
+                <img src="images/skins/city.jpg">
+                <img src="images/skins/cloth.png">
+                <img src="images/skins/kiwi.jpg">
+                <img src="images/skins/lights.jpg">
+                <img src="images/skins/violate.jpg">
+                <img src="images/skins/yellow.jpg">
+                <img src="images/skins/ocean.jpg">
+                <img src="images/skins/tectile.png">
+            </div>
+    </div>
+    <div class="layer"></div>
+</body>
+</html>
+<script src="js/jquery.min.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery.event.ue.js"></script>
+<script src="js/jquery.udraggable.js"></script>
+<!-- <script src="js/echarts.min.js"></script> -->
+<script>
+window.onload=function(){
+    clock();
+    // visitedTable();
+    mackLineChart({
+        domObj:document.getElementById("visited"),
+        tit:163,
+        subtit:"近期访问量",
+        xdata:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ydata: [25, 15,35, 20, 18, 20, 30],
+        IsResponive:true
+    });
+    mackLineChart({
+        domObj:document.getElementById("msgs"),
+        tit:35,
+        subtit:"近期留言",
+        xdata:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ydata: [5, 8,9, 7, 0, 5, 1],
+        IsResponive:true
+
+    });
+    mackLineChart({
+        domObj:document.getElementById("follows"),
+        tit:105,
+        subtit:"近期关注",
+        xdata:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ydata: [15, 18,19, 17, 10, 15, 11],      
+          IsResponive:true
+    });
+    mackLineChart({
+        domObj:document.getElementById("TotalUser"),
+        tit:'',
+        subtit:"总用户",
+        xdata:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ydata: [35, 45,61, 70, 93, 130, 188],
+        IsResponive:true
+
+    });
+    $(".chartTop ").on("click",".tile-actions", function () {
+        let $this=$(this).find("ul");
+       if ( $this.css("display")=="block"){
+        $this.removeClass("fadeInUp").addClass("fadeOutDown");
+        setTimeout(function(){
+            $this.css("display","none");  
+        },500 )
+        $this.css("display","none");
+       
+       }else{
+        $this.css("display","block").removeClass("fadeOutDown").addClass("fadeInUp");
+       }
+       
+    });
+    mackLineChart({
+        domObj:document.getElementById("totalUser"),
+        tit:'',
+        subtit:"",
+        xdata:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ydata: [35, 45,61, 70, 93, 130, 188],
+        areacolor:"rgba(255,255,255,.5)",
+        xshow:true,
+        yshow:true,
+        grid:40,
+        gridTop:20,
+        textColor:"white",
+        IsResponive:true
+    });
+    makeScalBarChart({
+        domObj:document.getElementById("chartOne"),
+        IsResponive:true,
+        autoScroll:true, 
+        IsResponive:true
+    })
+    makePieChart({
+        domObj:document.getElementById("chartTwo1"),
+        tit:"图表1",
+        IsResponive:true
+    })
+    makePieChart({
+        domObj:document.getElementById("chartTwo2"),
+        tit:"图表1",
+        IsResponive:true
+    })
+    makePieChart({
+        domObj:document.getElementById("chartTwo3"),
+        tit:"图表1",
+        IsResponive:true
+    })
+    makePieChart({
+        domObj:document.getElementById("chartTwo4"),
+        tit:"图表1",
+        IsResponive:true
+    })
+    makePieChart({
+        domObj:document.getElementById("chartTwo5"),
+        tit:"图表1",
+        IsResponive:true
+    })
+   //拖拽
+    $(".UserToDo").on("click","p", function () {
+        if($(this).hasClass("checked")){
+            $(this).removeClass("checked");
+        }else{
+            $(this).addClass("checked");
+        }
+    });
+    $(".UserToDo").on("mousedown","li", function () {
+        $(this).addClass("move");
+        $(this).udraggable({
+            containment: 'parent',
+            axis:'y'
+        });
+    });
+    $(".UserToDo").on("mouseup","li", function () {
+        $(this).removeClass("move");
+    });
+    
+    window.addEventListener("resize",function(){
+        let cilentWidth=document.documentElement.cilentWidth||document.body.cilentWidth;
+        // $(".userInfo span").html($(window).width());
+        let height=$(".prTwo").offset().top+$(".prTwo").height()
+        $(".wrap").css("height",height);
+        $(".menu").prop("style","");
+    })
+    $(".wrap").css("height",$(".prTwo").offset().top+$(".prTwo").height());
+    $(".head_left").on("click",".menu_toggle", function () {
+        if( $(".menu").css("display")=="block"){
+            $(".menu").css("display","none");
+            $(".board").css("width",233);
+        }else{
+            $(".menu").css("display","block");
+            $(".board").css("width",188);
+        }
+        
+    });
+    $(".bgBox").on("click", "img",function () {
+        let src="url("+$(this).attr("src")+")";
+        $("body").css("background-image",src);
+    });
+
+    $(".bgBox").on("click", ".add",function () {
+        $(".layer").animate({"opacity":0},600,function(){
+            css("display","none");
+        })
+        $(".bgBox").animate({
+            top:"-190px",
+            opacity:0
+        },600,function(){
+            $(".bgBox").css({"display":"none"});
+        });
+    });
+
+    $("#sliderBtn").click(function (e) { 
+        e.preventDefault();
+        $(".layer").css("display","block");
+        $(".bgBox").css("display","block").animate({
+            "top":"50%",
+            opacity:1
+        },600);
+    });
+}
+function clock(){
+    let hour=document.getElementById("hour");
+    let minute=document.getElementById("minute");
+    let second=document.getElementById("second");
+    let now=new Date();
+    hour.innerHTML=now.getHours()>9?now.getHours():"0"+now.getHours();
+    minute.innerHTML=now.getMinutes()>9?now.getMinutes():"0"+now.getMinutes();;
+    second.innerHTML=now.getSeconds()>9?now.getSeconds():"0"+now.getSeconds();;
+
+    setInterval(function(){
+        let secondNum=parseInt(second.innerHTML);
+        secondNum++;
+        second.innerHTML=secondNum>9?secondNum:"0"+secondNum;
+        if(secondNum>=60){
+            second.innerHTML=0;
+            let minuteNum=parseInt(minute.innerHTML);
+            minuteNum++;
+            minute.innerHTML=minuteNum>9?minuteNum:"0"+minuteNum;
+            if(minuteNum>=60){
+                minute.innerHTML=0;
+                let hourNum=parseInt(hour.innerHTML);
+                hourNum++;
+                hour.innerHTML=hourNum>9?hourNum:"0"+hourNum;
+                if(hourNum>=24){
+                    second.innerHTML=0; 
+                    minute.innerHTML=0;
+                    hour.innerHTML=0;
+                }
+            }
+        }
+    },1000)
+}
+function mackLineChart(obj){
+    var myChart = echarts.init(obj.domObj);
+    let  option = {
+        title:{
+            x:"left",
+            y:"2px",
+            text:obj.tit,
+            subtext:obj.subtit,
+            itemGap: 25,  
+            textStyle: {
+                fontSize: 16,
+                color: '#fff'                     
+            },
+            subtextStyle: {
+                color: '#fff' ,
+                fontSize: 14,
+                fontWeight: 'normal',
+            }
+        },
+        grid:{
+                top:obj.gridTop==undefined?10:obj.gridTop,
+                x: obj.grid==undefined?5:obj.grid,
+                y: obj.grid==undefined?5:obj.grid,
+                x2: obj.grid==undefined?5:obj.grid,
+                y2: obj.grid==undefined?5:obj.grid,
+        }, 
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'line',// 默认为直线，可选为：'line' | 'shadow'
+                lineStyle : {          // 直线指示器样式设置
+                    color: 'salmon'
+                    // width: 2,
+                    // type: 'solid'
+                }   
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,           
+            show:obj.xshow==undefined?false:obj.xshow,
+            data: obj.xdata,
+            axisLabel:{
+                textStyle: {
+                    color: obj.textColor==undefined?"white":obj.textColor
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            show:obj.yshow==undefined?false:obj.yshow,
+            axisLabel:{
+                textStyle: {
+                    color: '#fff'
+                }
+            }
+        },
+        series: [{
+            data: obj.ydata,
+            type: 'line',
+            // color:"white",
+            showSymbol: true,
+            areaStyle: {
+                color:obj.areacolor==undefined?"rgba(0,0,0,.3)":obj.areacolor
+            },
+            itemStyle: {         
+                normal: {           
+                    color: "salmon",//折线点的颜色 
+                    lineStyle: {           
+                        color: "#fff"//折线的颜色          
+                    }        
+                }     
+            },
+
+
+        }]
+    };
+    myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+
+}
+function makeScalBarChart(obj){
+    var myChart = echarts.init(obj.domObj);
+    let n=parseInt(Math.random()*888)+200;
+    let data=generateData(n);
+    let option = {
+        // toolbox: {
+        //     feature: {
+        //         dataZoom: {
+        //             yAxisIndex: false
+        //         },
+        //         saveAsImage: {
+        //             pixelRatio: 2
+        //         }
+        //     }
+        // },
+        color:"rgba(255,255,255,0.5)",
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            top:20,
+            bottom: 30,
+            x:45,
+            y:10
+ 
+        },
+        // dataZoom: [{
+        //     type: 'inside'
+        // }, {
+        //     type: 'slider'
+        // }],
+        dataZoom: [{   
+            xAxisIndex: 0,					            	 
+            show:false,					                  
+            type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件					                  
+            startValue: 0,      // 从头开始。					                  
+            endValue: 200         // 一次性展示五个。					              
+        }],
+        xAxis: {
+            data: data.categoryData,
+            silent: false,
+            splitLine: {
+                show: false
+            },
+            splitArea: {
+                show: false
+            }
+        },
+        yAxis: {
+            splitArea: {
+                show: false
+            }
+        },
+        series: [{
+            type: 'bar',
+            data: data.valueData,
+            // Set `large` for large data amount
+            large: true
+        }]
+    };
+myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+    if(obj.autoScroll!=undefined&&obj.autoScroll){
+        setInterval(function() {		
+        // 每次向后滚动一个，最后一个从头开始。
+        if(option.dataZoom[0].endValue == data.valueData.length - 1){	
+            option.dataZoom[0].endValue = 200;						
+            option.dataZoom[0].startValue = 0;					
+        }else{						
+            option.dataZoom[0].endValue = option.dataZoom[0].endValue + 1;
+            option.dataZoom[0].startValue = option.dataZoom[0].startValue + 1;					
+        }		
+        myChart.setOption(option);				
+        }, 100);
+    }
+   
+}
+function generateData(count){//为ScalBarChart产生数据
+    let baseValue = Math.random() * 1000;
+    let time = +new Date(2018, 9, 1);
+    let smallBaseValue;
+    function next(idx) {
+        smallBaseValue = idx % 30 === 0
+            ? Math.random() * 700
+            : (smallBaseValue + Math.random() * 500 - 250);
+        baseValue += Math.random() * 20 - 10;
+        return Math.max(
+            0,
+            Math.round(baseValue + smallBaseValue) + 3000
+        );
+    }
+
+    let categoryData = [];
+    let valueData = [];
+
+    for (let i = 0; i < count; i++) {
+        categoryData.push(echarts.format.formatTime('hh:mm:ss', time));
+        valueData.push(next(i).toFixed(2));
+        time += 30000;
+    }
+
+    return {
+        categoryData: categoryData,
+        valueData: valueData
+    };
+}
+function makePieChart(obj){
+    var myChart = echarts.init(obj.domObj);
+    var colors = ['rgba(0,0,0,0.6)','rgba(255,255,255,0.6)'];
+    let numA=Math.random()*90+10,numB=Math.random()*190+10;
+    var datas =[{ name: '成功',value: numA},{	name: '失败',value: numB}];
+    let option = {
+        title:{
+            x:"center",
+            y:"bottom",
+            text:obj.tit==undefined?"":obj.tit, 
+            textStyle: {
+                fontSize: 12,
+                color: 'rgba(255,255,255,0.9)',
+                fontWeight: 'normal',       
+            }
+        },
+        // tooltip:{
+        //     show:true,
+        //     formatter:"{d}%",
+        // },
+        series:[{
+            type: 'pie',
+            radius: ['50%', '70%'],
+            hoverAnimation: false,
+            color: colors,
+            label: {
+                normal:{
+                    show:true,
+                    position:"center",
+                    formatter:"{d}%"
+                }
+            } ,data:datas
+        }]
+
+    };
+
+    myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+}
+
+</script>

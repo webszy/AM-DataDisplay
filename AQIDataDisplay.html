@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>大数据展示页2</title>
+  <link rel="stylesheet" type="text/css" href="css/global.css">
+  <link rel="stylesheet" type="text/css" href="css/display2.css">
+</head>
+<body>
+  <h1 class="mainTitle">空气指数展示(AQI、PM2.5等)</h1>
+  <p id="timer"></p>
+  <div class="chooseCity" id="chooseCity">
+    <h3>请选择您的城市</h3>
+    <select id="citys">
+      <option value="">----</option>
+      <option value="北京">北京</option>
+      <option value="西安">西安</option>
+      <option value="延安">延安</option>
+      <option value="咸阳">咸阳</option>
+      <option value="上海">上海</option>
+    </select>
+  </div>
+  <div class="wrap">
+    <div class="left">
+      <div id="chart1"></div>
+      <div id="chart2"></div> 
+  </div>
+   <div class="info"> 
+     <h3>今日空气指数</h3>
+     <p class="flag" id="flag" style="color: #7CFC00;">良</p>
+    <ul class="cityDetail">
+      <li id="cityName">西安</li>
+      <li>PM2.5：<span id="pm25">1</span></li>
+      <li>AQI：<span id="aqi">1</span></li>
+    </ul>
+     <h3>各区域观测点</h3>
+     <ul class="area" id="area">
+      <!-- <li>
+        <h4>西安</h4>
+        <p style="color: #7CFC00;">良</p>
+        <span class="area_pm25">PM2.5：</span>
+        <span class="area_aqi">AQI：</span>
+      </li> -->
+     </ul>
+    </div> 
+
+  </div>
+</body>
+</html>
+<script src="js/echarts.min.js"></script>
+<script>
+  addEventListener("DOMContentLoaded",onReady);
+  function onReady(){
+    showTime();
+    // writeData();
+  } 
+  function getDateTimeString(){
+    let now=new Date();
+    let year=now.getFullYear();
+    let month=parseInt(now.getMonth())+1;
+    let day=now.getDate();
+    let hour=parseInt(now.getHours()) < 10?"0"+now.getHours():now.getHours();
+    let minute=parseInt(now.getMinutes()) < 10?"0"+now.getMinutes():now.getMinutes();
+    let second=parseInt(now.getSeconds()) < 10?"0"+now.getSeconds():now.getSeconds();
+    let week='';
+    switch (now.getDay()) {
+      case 0:week="星期日";break;
+      case 1:week="星期一";break;
+      case 2:week="星期二";break;
+      case 3:week="星期三";break;
+      case 4:week="星期四";break;
+      case 5:week="星期五";break;
+      default:week="星期六";break;
+    }
+    let DateString=`${year}年${month}月${day}日`;
+    let TimeString=`${hour}:${minute}:${second} ${week}`;
+    return "当前时间："+DateString+" "+TimeString;
+  };
+  function showTime(){
+    let timebox=document.getElementById("timer");
+    setInterval(function(){
+      timebox.innerHTML=getDateTimeString();
+    },1000)
+  }
+  function creatXHR() {
+    let xhr;
+    if(window.XMLHttpRequest){
+      xhr = new window.XMLHttpRequest();
+    }else if(window.ActiveXObject('MicrosoftXMLHTTP')){
+      xhr = new ActiveXObject();
+    }else{
+      return console.log('your brower can not support XMLHttpRequest');
+    }
+    return xhr;
+  }
+  function sendAjax(url) {
+    let xhr=creatXHR();
+        return new Promise(function (resolve,reject) {
+            xhr.onreadystatechange = function () {
+                if(xhr.readyState === 4 &&xhr.status === 200){
+                    let text = xhr.responseText;
+                    resolve&&resolve(text);
+                }
+            };
+            xhr.open('GET',url);
+            xhr.send();
+        });
+}
+  async function getData(cityCode) {
+    let details='';
+    await sendAjax("http://api.help.bj.cn/apis/aqi?id="+cityCode).then(function(text){
+      details=text;
+    });
+    await console.log(details);
+    return JSON.parse(details);
+}
+  function makeCharts1(obj,datas){
+  let myChart = echarts.init(obj.domObj);
+  let re=transferData(datas);
+  // console.log(re);
+  let xData=re[0],yData=re[1],bgData=[];
+  // console.log(xData,yData);
+  let len=xData.length;
+  for(let i=0;i<len;i++){
+    bgData.push(100)
+  }
+  let option = {
+    // color: ['#3398DB'],
+    title:{
+      x:"center",
+      y:"0",
+      text:obj.tit==undefined?"":obj.tit, 
+      textStyle: {
+          fontSize: 16,
+          color: 'rgba(255,255,255,0.9)',
+          fontWeight: 'normal',       
+      }
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'line',
+            lineStyle: {
+                opacity: 0
+            }
+        },
+        formatter: "{b}: {c}"
+    },
+    legend: {
+        data: ['直接访问', '背景'],
+        show: false
+    },
+    grid: {
+        left: '0%',
+        right: '0%',
+        bottom: '5%',
+        top: '7%',
+        height: '85%',
+        containLabel: true,
+        z: 22
+    },
+    xAxis: [{
+        type: 'category',
+        gridIndex: 0,
+        data: xData,
+        axisTick: {
+            alignWithLabel: true
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#0c3b71'
+            }
+        },
+        axisLabel: {
+          show: true,
+          color: "white",//'rgb(170,170,170)',
+          fontSize:10,
+          interval:0,//横轴信息全部显示  
+          rotate:-15,//-15度角倾斜显示 
+        }
+    }],
+    yAxis: [{
+            type: 'value',
+            gridIndex: 0,
+            splitLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            min: 0,
+            // max: 200,
+            axisLine: {
+                lineStyle: {
+                    color: '#0c3b71'
+                }
+            },
+            axisLabel: {
+                color: 'rgb(170,170,170)',
+                formatter: '{value} '
+            }
+        },
+        {
+            type: 'value',
+            gridIndex: 0,
+            min: 0,
+            // max: 200,
+            splitNumber: 12,
+            splitLine: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                show: false
+            },
+            splitArea: {
+                show: true,
+                areaStyle: {
+                    color: ['rgba(250,250,250,0.0)', 'rgba(250,250,250,0.05)']
+                }
+            }
+        }
+    ],
+    series: [{
+            name: 'PM2.5',
+            type: 'bar',
+            barWidth: '30%',
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            itemStyle: {
+                normal: {
+                    barBorderRadius: 30,
+                    color: new echarts.graphic.LinearGradient(
+                        0, 0, 0, 1, [{
+                                offset: 0,
+                                color: '#00feff'
+                            },
+                            {
+                                offset: 0.5,
+                                color: '#027eff'
+                            },
+                            {
+                                offset: 1,
+                                color: '#0286ff'
+                            }
+                        ]
+                    )
+                }
+            },
+            data: yData,
+            zlevel: 11
+
+        },
+        {
+            name: '背景',
+            type: 'bar',
+            barWidth: '50%',
+            xAxisIndex: 0,
+            yAxisIndex: 1,
+            barGap: '-135%',
+            data: bgData,
+            itemStyle: {
+                normal: {
+                    color: 'rgba(255,255,255,0.1)'
+                }
+            },
+            zlevel: 9
+        },
+      
+    ]
+};
+
+  myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+}
+  function makeCharts2(obj,datas){
+    let myChart = echarts.init(obj.domObj);
+  let re=transferData(datas);
+  // console.log(re);
+  let xData=re[0],yData=re[2];
+  let option = {
+    // backgroundColor: 'rgba(69,137,148,0.6)',
+    title:{
+      x:"center",
+      y:"0",
+      text:obj.tit==undefined?"":obj.tit, 
+      textStyle: {
+          fontSize: 16,
+          color: 'rgba(255,255,255,0.9)',
+          fontWeight: 'normal',       
+      }
+    },
+      tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+              lineStyle: {
+                  color: 'salmon'
+              }
+          }
+      },
+      legend: {
+          icon: 'rect',
+          itemWidth: 14,
+          itemHeight: 5,
+          itemGap: 13,
+          data: ['AQI'],
+          right: '4%',
+          textStyle: {
+              fontSize: 12,
+              color: 'white'
+          }
+      },
+      grid: {
+        left: '1%',
+        right: '2%',
+        bottom: '8%',
+        top:'14%',
+          containLabel: true
+      },
+      xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          axisLine: {
+              lineStyle: {
+                  color: 'white'
+              }
+          },
+          data: xData,
+          axisLabel:{
+            interval:0,
+            rotate:-15,
+              textStyle:{
+                fontSize:12
+              }
+          },
+      }],
+      yAxis: [{
+          type: 'value',
+          interval: 40,
+          axisTick: {
+              show: false
+          },
+          axisLine: {
+            "show": true,
+              lineStyle: {
+                  color: 'white'
+              }
+          },
+          axisLabel: {
+              textStyle: {
+                  fontSize: 12
+              }
+          },
+          splitLine: {
+            "show": false,
+              lineStyle: {
+                  color: 'rgb(255,255,255)'
+              }
+          }
+      }],
+      series: [{
+          name: 'AQI',
+          type: 'line',
+          smooth: true,
+          lineStyle: {
+              normal: {
+                  width: 2
+              }
+          },
+          areaStyle: {
+              normal: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                      offset: 0,
+                      color: 'rgba(254, 67, 101, 0.4)'
+                  }, {
+                      offset: 0.8,
+                      color: 'rgba(254, 67, 101, 0)'
+                  }], false),
+                  shadowColor: 'rgba(254, 67, 101, 0.1)',
+                  shadowBlur: 10
+              }
+          },
+          symbolSize:4,  
+          itemStyle: {
+              normal: {
+                  color: 'rgb(254, 67, 101)',
+                  borderColor:'#e48b4c'
+              },
+          },
+          data: yData,
+      } ]
+  };
+    myChart.setOption(option);
+        if(obj.IsResponive!=undefined&&obj.IsResponive){
+            window.addEventListener("resize",function(){
+                myChart.resize();
+            });
+        }
+  }
+  window.onload= function(){
+    document.getElementById("citys").onchange= async function(){
+      let datas= await getData(this.value);
+      if(datas){
+        document.getElementById("chooseCity").style.display="none";
+        document.getElementsByClassName("wrap")[0].style.display="block";
+        makeCharts1({
+          domObj:document.getElementById("chart2"),
+          tit:datas.city+"及各观测点PM2.5数据",
+          IsResponive:true
+        },datas);
+        makeCharts2({
+          domObj:document.getElementById("chart1"),
+          tit:datas.city+"及各观测点AQI数据",
+          IsResponive:true
+        },datas);
+        updateInfo(datas);
+      }
+    }
+  }
+function transferData(datas){
+//   console.log(datas.data);
+  let arr=datas.data;
+  let x=[],y=[],y2=[];
+  for(let v of arr){
+    x.push(v.add);
+    y.push(v.pm25);
+    y2.push(v.aqi);
+  }
+  return [x,y,y2];
+}
+function updateInfo(datas){
+  let BaseData=datas.data;
+  let colors="";
+  if(BaseData[0].per=="优"||BaseData[0].per=="良"){
+    colors="#7CFC00";
+  }else{
+    colors="#FF4500";
+  }
+  document.getElementById("cityName").innerHTML=datas.city;
+  document.getElementById("flag").innerHTML=BaseData[0].per;
+  document.getElementById("flag").style.color=colors;
+  document.getElementById("pm25").innerHTML=BaseData[0].pm25;
+  document.getElementById("aqi").innerHTML=datas.aqi;
+  let str='';
+  for(let i=1;i<BaseData.length;i++){
+    if(BaseData[i].per=="优"||BaseData[i].per=="良"){
+        colors="#7CFC00";
+    }else{
+        colors="#FF4500";
+    }
+    let addName=BaseData[i].add;
+    let flag=BaseData[i].per;
+    let pm25=BaseData[i].pm25;
+    let aqi=BaseData[i].aqi;
+     str+=`<li><h4>${addName}</h4><p style="color:${colors};">${flag}</p>
+        <span>PM2.5：${pm25}</span></br><span>AQI：${aqi}</span></li>`
+  }
+  document.getElementById("area").innerHTML=str;
+
+}
+</script>

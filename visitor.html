@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>留言管理</title>
+    <link rel="stylesheet" type="text/css" href="css/global.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/calendar.css">
+    <link rel="stylesheet" type="text/css" href="css/visitor.css">
+
+</head>
+<body>
+    <div class="head">
+        <div class="head_left">
+            <p class="menu_toggle"></p>
+            <a href="index.html" class="GoIndex">微信公众号管理平台V1.0</a>
+        </div>
+        <div class="head_right">
+            <div id="message" class="msg_btn ">
+                <a href="javascript:void(0)"></a>
+                <p id="msg_num">3</p>
+                <span class="animated">查看消息</span>
+            </div>
+            <div class="searchBar">
+               <input type="text"  id="search"> 
+            </div>
+            <div class="timeBox">
+                <i id="hour">12</i>
+                :
+                <i id="minute" >12</i>
+                :
+                <i id="second">50</i>
+            </div>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="menu">
+            <a href="index.html" class="menu_clicked">
+                <p class="animated">首页</p>
+            </a>
+            <a href="javascript:void(0)">
+                    <p class="animated">访问统计</p>
+            </a>
+            <a href="Msg.html" >
+                    <p class="animated">留言管理</p>
+            </a>
+            <a href="charts.html" >
+                    <p class="animated">报表分析</p>
+            </a>
+        </div>
+        <div class="board">
+            <div class="userInfo">
+                <img class="animated" src="images/userimg.jpg">
+                <h3>西楼昨夜听春雨</h3>
+                <p>一人一马入江湖，一杯浊酒饮一秋</p>
+                <span>未设置微信号</span>
+            </div>
+            <div class="calendar" id="calendar"></div>
+            <div class="ToDo">
+                <p class="ToDo_tit">待处理消息</p>
+                <ul class="ToDoList">
+                    <li><a href="javascript:void(0)" >新增关注：22个</a></li>
+                    <li><a href="javascript:void(0)" >未读留言：18条</a></li>
+                    <li><a href="javascript:void(0)" >投票结果：22条</a></li>
+                    <li><a href="javascript:void(0)" >收到赞赏：2条</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+        <h1 class="pageTitle">用户访问管理</h1>
+        <div class="visitorChart1">
+            <div class="chartTop">
+                    <h3 class="title">用户访问量</h3>
+                    <div class="title-actions">
+                        <ul class="chartMenu animated">
+                            <li>刷新 </li>
+                            <li>显示副表</li>
+                        </ul>
+                    </div>
+                <div>
+        </div>
+
+                    </div>
+            <div id="chart1"></div>
+                </div>
+            <div class="visitorChart2">
+                <div id="chart2"></div>
+                <div id="chart3"></div>
+            </div>
+                <table class="msgTable">
+                     <tr>
+                         <td>ID</td>
+                         <td>访问人</td>
+                         <td>访问页面</td>
+                         <td>今日访问次数</td>
+                     </tr>
+                     <tr>
+                        <td>1</td>
+                        <td>
+                            <img src="/images/userimg.jpg" alt="">
+                            <p>前端er</p>
+                        </td>
+                        <td>首页，新闻资讯等等</td>
+                        <td>10</td>
+                        </tr>
+                </table>
+                <div class="totalUsers">
+                    <h3>总关注人数</h3>
+                    <p>163</p>
+                </div>
+        </div>  
+
+        <div class="sliderBtn animated" id="sliderBtn">更换背景</div>
+        <div class="bgBox">
+                <div class="chartTop">
+                    <h3 class="title">选择背景</h3>
+                    <div class="add"><i></i><i></i></div>
+                </div>
+                <div class="bgimgs">
+                    <img src="images/skins/blue.jpg">
+                    <img src="images/skins/chrome.jpg">
+                    <img src="images/skins/greenish.jpg">
+                    <img src="images/skins/night.jpg">
+                    <img src="images/skins/sunny.jpg">
+                    <img src="images/skins/sunset.jpg">
+                    <img src="images/skins/city.jpg">
+                    <img src="images/skins/cloth.png">
+                    <img src="images/skins/kiwi.jpg">
+                    <img src="images/skins/lights.jpg">
+                    <img src="images/skins/violate.jpg">
+                    <img src="images/skins/yellow.jpg">
+                    <img src="images/skins/ocean.jpg">
+                    <img src="images/skins/tectile.png">
+                </div>
+        </div>
+        <div class="layer"></div>
+    </div>
+</body>
+</html>
+<script src="js/jquery.min.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/echarts.min.js"></script>
+<script src="js/jquery.event.ue.js"></script>
+<script src="js/jquery.udraggable.js"></script>
+<script>
+window.onload=function(){
+    clock();
+    // visitedTable();
+    mackLineChart({
+        domObj:document.getElementById("chart1"),
+        tit:"",
+        subtit:"",
+        xdata:['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ydata: [25, 15,35, 20, 18, 20, 30],
+        IsResponive:true,
+        xshow:true,
+        yshow:true
+    });
+    makePieChart({
+        domObj:document.getElementById("chart2"),
+        tit:"用户性别"
+    })
+    mackLineChart2({
+        domObj:document.getElementById("chart3"),
+        tit:"用户年龄"
+
+    })
+    window.addEventListener("resize",function(){
+        let cilentWidth=document.documentElement.cilentWidth||document.body.cilentWidth;
+        // $(".userInfo span").html($(window).width());
+        // let height=$(".prTwo").offset();
+        // console.log(height)
+        // +$(".prTwo").height()
+        // $(".wrap").css("height",height);
+        $(".menu").prop("style","");
+    })
+    // $(".wrap").css("height",$(".prTwo").offset().top+$(".prTwo").height());
+    $(".head_left").on("click",".menu_toggle", function () {
+        if( $(".menu").css("display")=="block"){
+            $(".menu").css("display","none");
+            $(".board").css("width",233);
+        }else{
+            $(".menu").css("display","block");
+            $(".board").css("width",188);
+        }
+        
+    });
+    $(".bgBox").on("click", "img",function () {
+        let src="url("+$(this).attr("src")+")";
+        $("body").css("background-image",src);
+    });
+    $(".bgBox").on("click", ".add",function () {
+        $(".layer").animate({"opacity":0},600,function(){
+            $(".layer").css("display","none");
+        })
+        $(".bgBox").animate({
+            top:"-190px",
+            opacity:0
+        },600,function(){
+            $(".bgBox").css({"display":"none"});
+        });
+    });
+    $("#sliderBtn").click(function (e) { 
+        e.preventDefault();
+        $(".layer").css("display","block");
+        $(".bgBox").css("display","block").animate({
+            "top":"50%",
+            "opacity":1
+        },600);
+    });
+    $(".chartTop").on("click",".title-actions", function () {
+        let $this=$(this).find("ul");
+       if ( $this.css("display")=="block"){
+        $this.removeClass("fadeInUp").addClass("fadeOutDown");
+        setTimeout(function(){
+            $this.css("display","none");  
+        },500 )
+        $this.css("display","none");
+       
+       }else{
+        $this.css("display","block").removeClass("fadeOutDown").addClass("fadeInUp");
+       }
+       
+    });
+}
+function clock(){
+    let hour=document.getElementById("hour");
+    let minute=document.getElementById("minute");
+    let second=document.getElementById("second");
+    let now=new Date();
+    hour.innerHTML=now.getHours()>9?now.getHours():"0"+now.getHours();
+    minute.innerHTML=now.getMinutes()>9?now.getMinutes():"0"+now.getMinutes();;
+    second.innerHTML=now.getSeconds()>9?now.getSeconds():"0"+now.getSeconds();;
+
+    setInterval(function(){
+        let secondNum=parseInt(second.innerHTML);
+        secondNum++;
+        second.innerHTML=secondNum>9?secondNum:"0"+secondNum;
+        if(secondNum>=60){
+            second.innerHTML=0;
+            let minuteNum=parseInt(minute.innerHTML);
+            minuteNum++;
+            minute.innerHTML=minuteNum>9?minuteNum:"0"+minuteNum;
+            if(minuteNum>=60){
+                minute.innerHTML=0;
+                let hourNum=parseInt(hour.innerHTML);
+                hourNum++;
+                hour.innerHTML=hourNum>9?hourNum:"0"+hourNum;
+                if(hourNum>=24){
+                    second.innerHTML=0; 
+                    minute.innerHTML=0;
+                    hour.innerHTML=0;
+                }
+            }
+        }
+    },1000)
+}
+function mackLineChart(obj){
+    var myChart = echarts.init(obj.domObj);
+    let  option = {
+        title:{
+            x:"left",
+            y:"2px",
+            text:obj.tit,
+            subtext:obj.subtit,
+            itemGap: 25,  
+            textStyle: {
+                fontSize: 16,
+                color: '#fff'                     
+            },
+            subtextStyle: {
+                color: '#fff' ,
+                fontSize: 14,
+                fontWeight: 'normal',
+            }
+        },
+        grid:{
+                top:obj.gridTop==undefined?10:obj.gridTop,
+                x: obj.grids==undefined?25:obj.grids,
+                y: obj.grids==undefined?25:obj.grids,
+                x2: obj.grids==undefined?25:obj.grids,
+                y2: obj.grids==undefined?25:obj.grids,
+        }, 
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'line',// 默认为直线，可选为：'line' | 'shadow'
+                lineStyle : {          // 直线指示器样式设置
+                    color: 'salmon'
+                    // width: 2,
+                    // type: 'solid'
+                }   
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,           
+            show:obj.xshow==undefined?false:obj.xshow,
+            data: obj.xdata,
+            axisLabel:{
+                textStyle: {
+                    color: obj.textColor==undefined?"white":obj.textColor
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            show:obj.yshow==undefined?false:obj.yshow,
+            axisLabel:{
+                textStyle: {
+                    color: '#fff'
+                }
+            }
+        },
+        series: [{
+            data: obj.ydata,
+            type: 'line',
+            // color:"white",
+            showSymbol: true,
+            areaStyle: {
+                color:obj.areacolor==undefined?"rgba(0,0,0,.3)":obj.areacolor
+            },
+            itemStyle: {         
+                normal: {           
+                    color: "salmon",//折线点的颜色 
+                    lineStyle: {           
+                        color: "#fff"//折线的颜色          
+                    }        
+                }     
+            },
+
+
+        }]
+    };
+    myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+
+}
+function makePieChart(obj){
+    let myChart = echarts.init(obj.domObj);
+    let colors = ['rgba(0,0,0,0.6)','rgba(255,255,255,0.6)'];
+    let numA=Math.random()*90+10,numB=Math.random()*190+10;
+    let datas =[{ name: '男性',value: numA},{	name: '女性',value: numB}];
+    let option = {
+    title: {
+        x: 'center',
+        y: 'bottom',
+        textStyle: {
+            fontWeight: 400,
+            fontSize: 18,
+            color: 'white'
+        },
+        text: obj.tit || ''
+    },
+    tooltip: {
+        trigger: 'item',
+        show: true
+        //   formatter: "{b}: {c} ({d}%)"
+    },
+    legend: {
+        orient: 'horizontal',
+        top: 16,
+        icon: 'circle',
+        selectedMode: true,
+        itemWidth: 12,
+        itemHeight: 12,
+        itemGap: 6,
+        borderRadius: 6,
+        data:["男性","女性"]
+    },
+    series: [{
+        type: 'pie',
+        // clickable:false,
+        // selectedMode: 'single',//单点击设置
+        hoverAnimation: true,
+        radius: ['40%', '67%'],
+        color: colors,
+        label: {
+            normal: {
+                position: 'inner',
+                // formatter: '{d}%',
+                formatter: function(param) {
+                    if (!param.percent) return ''
+                    var f = Math.round(param.percent * 10) / 10;
+                    var s = f.toString();
+                    var rs = s.indexOf('.');
+                    if (rs < 0) {
+                        rs = s.length;
+                        s += '.';
+                    }
+                    while (s.length <= rs + 1) {
+                        s += '0';
+                    }
+                    return s + '%';
+                },
+                textStyle: {
+                    color: '#fff',
+                    fontSize: 12
+                }
+            }
+        },
+        labelLine: {
+            normal: {
+                show: false
+            }
+        },
+        data: datas
+    }]
+};
+
+    myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+}
+function mackLineChart2(obj){
+    let myChart = echarts.init(obj.domObj);
+
+let  Color = ['#3b7186', '#2e8d94', '#637b69', '#789b6f',
+    '#3b64a6', '#2672cc', '#503e8d', '#5d3ec5',
+    '#874f5f', '#b6575c', '#623363', '#962e66'
+]
+var xData =["小于18","18-30","30-40","50以上"]
+
+
+let option = {
+    title: {
+        x: 'center',
+        y: 'bottom',
+        textStyle: {
+            fontWeight: 400,
+            fontSize: 18,
+            color: 'white'
+        },
+        text: obj.tit || ''
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '10%',
+        containLabel: true
+    },
+
+    tooltip: {
+        show: "true",
+        trigger: 'item',
+        formatter: '{b}<br />{a0}: {c0}%',
+        backgroundColor: 'rgba(0,0,0,0.7)', // 背景
+        padding: [8, 10], //内边距
+        extraCssText: 'box-shadow: 0 0 3px rgba(255, 255, 255, 0.4);', //添加阴影
+        axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    xAxis: {
+        type: 'value',
+        axisTick: {
+            show: false
+        },
+        axisLine: {
+            show: true,
+            lineStyle: {
+                color: '#32346c',
+            }
+        },
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#32346c ',
+            }
+        },
+        axisLabel: {
+            textStyle: {
+                color: '#bac0c0',
+                fontWeight: 'normal',
+                fontSize: '12',
+            },
+            formatter: '{value}%',
+        },
+    },
+    yAxis: {
+        type: 'category',
+        axisLine: {
+            lineStyle: {
+                color: '#32346c'
+            }
+        },
+        splitLine: {
+            show: false
+        },
+        axisTick: {
+            show: false
+        },
+        splitArea: {
+            show: false
+        },
+        axisLabel: {
+            inside: false,
+            textStyle: {
+                color: '#bac0c0',
+                fontWeight: 'normal',
+                fontSize: '12',
+            },
+        },
+        data:xData
+    },
+    series: [{
+            name: '用户年龄段',
+            type: 'bar',
+            itemStyle: {
+                normal: {
+                    show: true,
+                    color: function(params) {
+                        var colorList = [];
+                        for (var i = 6; i > 0; i--) {
+                            colorList.push({
+                                type: 'bar',
+                                colorStops: [{
+                                    offset: 0,
+                                    color: Color[i*2 - 2] // 0% 处的颜色
+                                }, {
+                                    offset: 1,
+                                    color: Color[i*2 - 1] // 100% 处的颜色
+                                }],
+                                globalCoord: false, // 缺省为 false
+
+                            });
+                        }
+
+                        return colorList[params.dataIndex]
+                    },
+                    barBorderRadius: 50,
+                    borderWidth: 0,
+                    borderColor: '#333',
+                }
+            },
+            barGap: '0%',
+            barCategoryGap: '50%',
+            data: [22, 80, 40, 54]
+        }
+
+    ]
+};
+myChart.setOption(option);
+    if(obj.IsResponive!=undefined&&obj.IsResponive){
+        window.addEventListener("resize",function(){
+            myChart.resize();
+        });
+    }
+}
+</script>
