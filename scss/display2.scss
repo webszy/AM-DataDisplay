@@ -115,7 +115,7 @@ body{
   box-sizing: border-box;
   padding-left: 40px;
   li{
-    @include intiBox(100px,120px);
+    @include intiBox(100px,150px);
     background-color: rgba(255, 255, 255, .3);
     color:white;
     text-align: center;
